@@ -12,6 +12,7 @@ import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -20,6 +21,16 @@ public class MainActivity extends ActionBarActivity {
     String DELIVERED = "SMS_DELIVERED";
     PendingIntent sentPI, deliveredPI;
     BroadcastReceiver smsSentReceiver, smsDeliveredReceiver;
+    IntentFilter intentFilter;
+
+    private BroadcastReceiver intentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            //visualizzare l'SMS ricevuto nella TextView
+            TextView SMSes = (TextView) findViewById(R.id.textView1);
+            SMSes.setText(intent.getExtras().getString("sms"));
+        }
+    };
 
 
     @Override
@@ -29,11 +40,20 @@ public class MainActivity extends ActionBarActivity {
 
         sentPI = PendingIntent.getBroadcast(this,0, new Intent(SENT), 0);
         deliveredPI = PendingIntent.getBroadcast(this,0, new Intent(DELIVERED), 0);
+
+        //intent filter programmatico per filtrare l'SMS ricevuto
+        intentFilter = new IntentFilter();
+        intentFilter.addAction("SMS_RECEIVED_ACTION");
+
+        
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        //registrare il receiver
+        registerReceiver(intentReceiver, intentFilter);
 
         //creare il BroadcastReceiver quando l'SMS è stato spedito
         smsSentReceiver = new BroadcastReceiver() {
@@ -83,6 +103,10 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
+        //registrare il receiver
+        registerReceiver(intentReceiver, intentFilter);
+
         //de-registrare i due BroadcastReceivers
         unregisterReceiver(smsSentReceiver);
         unregisterReceiver(smsDeliveredReceiver);
