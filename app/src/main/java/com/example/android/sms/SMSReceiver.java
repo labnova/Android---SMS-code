@@ -38,6 +38,11 @@ public class SMSReceiver extends BroadcastReceiver {
             Toast.makeText(context, str, Toast.LENGTH_SHORT).show();
             Log.d("SMSReceiver", str);
 
+            //lanciare la mainActivity
+            Intent mainActivityIntent = new Intent(context, MainActivity.class);
+            mainActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(mainActivityIntent);
+
             //spedire un broadcast intent per aggiornare l'sms ricevuto nell'activity
             Intent broadcastIntent = new Intent();
             broadcastIntent.setAction("SMS_RECEIVED_ACTION");

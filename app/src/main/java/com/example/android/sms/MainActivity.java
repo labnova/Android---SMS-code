@@ -45,7 +45,7 @@ public class MainActivity extends ActionBarActivity {
         intentFilter = new IntentFilter();
         intentFilter.addAction("SMS_RECEIVED_ACTION");
 
-        
+
     }
 
     @Override
@@ -110,6 +110,14 @@ public class MainActivity extends ActionBarActivity {
         //de-registrare i due BroadcastReceivers
         unregisterReceiver(smsSentReceiver);
         unregisterReceiver(smsDeliveredReceiver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        //deregistrare il receiver
+        unregisterReceiver(intentReceiver);
     }
 
     public void onClick(View v) {
