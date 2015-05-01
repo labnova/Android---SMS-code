@@ -14,12 +14,40 @@
         android:layout_below="@+id/textView1"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="89dp" />
+        android:layout_marginTop="89dp"
+        android:background="@color/bright_foreground_material_light"
+        android:backgroundTint="@color/highlighted_text_material_light"
+        android:backgroundTintMode="screen"
+        android:capitalize="characters"
+        android:elegantTextHeight="true" />
+
+    <Button
+        android:id="@+id/btnDisplayValues"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClickDisplay"
+    />
+
+    <EditText
+        android:id="@+id/txtString"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/btnModifyValues"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClickModify"
+
+        />
 
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:maxWidth="@android:dimen/thumbnail_height" />
+
+
 
 </RelativeLayout>

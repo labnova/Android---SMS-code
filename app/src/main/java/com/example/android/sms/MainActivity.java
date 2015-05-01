@@ -15,6 +15,12 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.parse.ParseAnalytics;
+import com.parse.ParseAnonymousUtils;
+import com.parse.ParseInstallation;
+import com.parse.ParseUser;
+import com.parse.PushService;
+
 
 public class MainActivity extends ActionBarActivity {
     String SENT = "SMS_SENT";
@@ -37,6 +43,27 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        ParseAnalytics.trackAppOpenedInBackground(getIntent());
+
+        PushService.setDefaultPushCallback(this, MainActivity.class);
+        ParseInstallation.getCurrentInstallation().saveInBackground();
+
+        if(ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+            Intent intent = new Intent(this, ParseLoginSignup.class);
+            startActivity(intent);
+            finish();
+
+        } else {
+
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            if(currentUser == null) {
+                Intent intent = new Intent(this, ParseLoginSignup.class);
+                startActivity(intent);
+                finish();
+            }
+
+        }
 
         sentPI = PendingIntent.getBroadcast(this,0, new Intent(SENT), 0);
         deliveredPI = PendingIntent.getBroadcast(this,0, new Intent(DELIVERED), 0);
@@ -100,6 +127,12 @@ public class MainActivity extends ActionBarActivity {
         registerReceiver(smsSentReceiver, new IntentFilter(SENT));
     }
 
+
+    public void onClickLoad(View view) {
+        Intent i = new Intent("com.example.android.sms.appPrefActivity");
+        startActivity(i);
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -117,7 +150,7 @@ public class MainActivity extends ActionBarActivity {
         super.onDestroy();
 
         //deregistrare il receiver
-        unregisterReceiver(intentReceiver);
+      //  unregisterReceiver(intentReceiver);
     }
 
     public void onClick(View v) {

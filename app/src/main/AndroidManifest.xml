@@ -2,18 +2,24 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.android.sms" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
 
     <application
+        android:name=".ParseApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTask"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:launchMode="singleTask" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,8 +31,38 @@
             android:name=".SMSReceiver"
             android:enabled="true"
             android:exported="true" >
-            <intent-filter android:priority="100">
+            <intent-filter android:priority="100" >
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".SharedPreference"
+            android:label="@string/title_activity_shared_preference" >
+        </activity>
+        <activity
+            android:name=".appPrefActivity"
+            android:label="@string/title_activity_settings" >
+            <intent-filter>
+                <action android:name="com.example.android.sms.appPrefActivity" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Welcome"
+            android:label="@string/title_activity_welcome" >
+        </activity>
+        <activity
+            android:name=".ParseLoginSignup"
+            android:label="@string/title_activity_parse_login_signup" >
+        </activity>
+        
+        <service android:name="com.parse.PushService" ></service>
+        <receiver android:name="com.parse.ParseBroadcastReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
     </application>
